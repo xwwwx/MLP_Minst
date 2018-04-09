@@ -1,42 +1,42 @@
 
 # coding: utf-8
 
-# In[29]:
+
 
 
 from keras.utils import np_utils
 import numpy as np
 
 
-# In[30]:
+# 下載Minst資料
 
 
 from keras.datasets import mnist
 (x_train_image,y_train_label),(x_test_image,y_test_label) = mnist.load_data()
 
 
-# In[31]:
+# 將資料轉換成1維float32陣列
 
 
 x_Train = x_train_image.reshape(60000, 784).astype('float32')
 x_Test = x_test_image.reshape(10000, 784).astype('float32')
 
 
-# In[32]:
+# 資料標準化
 
 
 x_Train_normalize = x_Train / 255
 x_Test_normalize = x_Test / 255
 
 
-# In[33]:
+# 一位有效編碼
 
 
 y_Train_OneHot = np_utils.to_categorical(y_train_label)
 y_Test_OneHot = np_utils.to_categorical(y_test_label)
 
 
-# In[34]:
+
 
 
 from keras.models import Sequential
@@ -44,13 +44,13 @@ from keras.layers import Dense
 from keras.layers import Dropout
 
 
-# In[90]:
+# 初始化模型
 
 
 model = Sequential()
 
 
-# In[91]:
+# 加入輸入層 units=神經元數量 input_dim=輸入資料長度 activation=激活函數
 
 
 model.add(Dense(units=1000,
@@ -59,13 +59,13 @@ model.add(Dense(units=1000,
                 activation='relu'))
 
 
-# In[92]:
+# 加入Dropout層 
 
 
 model.add(Dropout(0.75))
 
 
-# In[93]:
+# 加入輸出層
 
 
 model.add(Dense(units=10,
@@ -73,20 +73,20 @@ model.add(Dense(units=10,
                 activation='softmax'))
 
 
-# In[94]:
+# 顯示模型概要
 
 
 print(model.summary())
 
 
-# In[95]:
+# 訓練初始化 loss=損失函數 optimizer=最佳化方法
 
 
 model.compile(loss='categorical_crossentropy',
               optimizer = 'adam' , metrics=['accuracy'])
 
 
-# In[96]:
+# 訓練模型 validation_split=分隔訓練資料及驗證資料的百分比 epochs=訓練次數 batch_size=每次訓練幾筆資料 
 
 
 train_history=model.fit(x=x_Train_normalize,
@@ -94,7 +94,7 @@ train_history=model.fit(x=x_Train_normalize,
                         epochs=15, batch_size=200,verbose=2)
 
 
-# In[97]:
+# 畫圖函數
 
 
 import matplotlib.pyplot as plt
@@ -108,19 +108,19 @@ def show_train_history(train_history,train,vlidation):
     plt.show()
 
 
-# In[98]:
+# 畫出訓練準確度及驗證準確度的曲線
 
 
 show_train_history(train_history,'acc','val_acc')
 
 
-# In[99]:
+# 畫出訓練損失函數及驗證損失函數的曲線
 
 
 show_train_history(train_history,'loss','val_loss')
 
 
-# In[100]:
+# 評估準確率
 
 
 scores = model.evaluate(x_Test_normalize, y_Test_OneHot)
@@ -128,19 +128,13 @@ print()
 print('accuracy=',scores[1])
 
 
-# In[101]:
+# 預測
 
 
 prediction = model.predict_classes(x_Test)
 
 
-# In[102]:
-
-
-prediction
-
-
-# In[103]:
+# 畫圖函數
 
 
 def plot_images_labels_prediction(images,labels,
@@ -160,14 +154,14 @@ def plot_images_labels_prediction(images,labels,
     plt.show()
 
 
-# In[104]:
+# 畫出預測結果
 
 
 plot_images_labels_prediction(x_test_image,y_test_label,
                                prediction,idx=340,num=1)
 
 
-# In[105]:
+# 混淆陣列
 
 
 import pandas as pd
